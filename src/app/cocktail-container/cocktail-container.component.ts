@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
 import { Cocktail } from "../shared/interfaces/cocktail.interface";
 import { CocktailService } from "../shared/services/cocktail.service";
 
@@ -7,17 +8,28 @@ import { CocktailService } from "../shared/services/cocktail.service";
   templateUrl: "./cocktail-container.component.html",
   styleUrls: ["./cocktail-container.component.scss"]
 })
-export class CocktailContainerComponent implements OnInit {
+export class CocktailContainerComponent implements OnInit, OnDestroy {
   public selectedCocktail: Cocktail;
   public cocktails: Cocktail[];
+  public subscription: Subscription;
 
   constructor(private cocktailService: CocktailService) {}
 
   ngOnInit() {
-    this.selectedCocktail = this.cocktails[0];
+    this.subscription = this.cocktailService.cocktails$.subscribe(
+      (cocktails: Cocktail[]) => {
+        this.cocktails = cocktails;
+      }
+    );
+
+    this.cocktailService.selectedCocktail$.subscribe(
+      (selectedCocktail: Cocktail) => {
+        this.selectedCocktail = selectedCocktail;
+      }
+    );
   }
 
-  public selectCocktail(index: number): void {
-    this.selectedCocktail = this.cocktails[index];
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

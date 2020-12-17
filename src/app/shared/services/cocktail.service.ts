@@ -4,7 +4,7 @@ import { Cocktail } from "../interfaces/cocktail.interface";
 
 @Injectable({ providedIn: "root" })
 export class CocktailService {
-  public cocktails: BehaviorSubject<Cocktail[]> = new BehaviorSubject([
+  public cocktails$: BehaviorSubject<Cocktail[]> = new BehaviorSubject([
     {
       name: "Mojito",
       img:
@@ -28,8 +28,8 @@ export class CocktailService {
     }
   ]);
 
-  public selectedCocktail: BehaviorSubject<Cocktail> = new BehaviorSubject(
-    this.cocktails.value[0]
+  public selectedCocktail$: BehaviorSubject<Cocktail> = new BehaviorSubject(
+    this.cocktails$.value[0]
   );
 
   constructor() {}
