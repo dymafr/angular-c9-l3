@@ -11,21 +11,22 @@ import { CocktailService } from "../shared/services/cocktail.service";
 export class CocktailContainerComponent implements OnInit, OnDestroy {
   public selectedCocktail: Cocktail;
   public cocktails: Cocktail[];
-  public subscription: Subscription;
+  public subscription: Subscription = new Subscription();
 
   constructor(private cocktailService: CocktailService) {}
 
   ngOnInit() {
-    this.subscription = this.cocktailService.cocktails$.subscribe(
-      (cocktails: Cocktail[]) => {
+    this.subscription.add(
+      this.cocktailService.cocktails$.subscribe((cocktails: Cocktail[]) => {
         this.cocktails = cocktails;
-      }
+      })
     );
-
-    this.cocktailService.selectedCocktail$.subscribe(
-      (selectedCocktail: Cocktail) => {
-        this.selectedCocktail = selectedCocktail;
-      }
+    this.subscription.add(
+      this.cocktailService.selectedCocktail$.subscribe(
+        (selectedCocktail: Cocktail) => {
+          this.selectedCocktail = selectedCocktail;
+        }
+      )
     );
   }
 
