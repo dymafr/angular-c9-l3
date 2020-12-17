@@ -30,6 +30,10 @@ export class CocktailContainerComponent implements OnInit, OnDestroy {
     );
   }
 
+  public selectCocktail(index: number) {
+    this.cocktailService.selectCocktail(index);
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
